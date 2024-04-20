@@ -1,0 +1,33 @@
+{
+  "name": "z-parser",
+  "version": "0.0.1",
+  "description": "The parser behind z js framework jsx in broswer templating.",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.22.0"
+  },
+  "scripts": {
+    "test": "ava -s -v",
+    "test:dev": "ava -s -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hussseinkizz/z-parser.git"
+  },
+  "keywords": [
+    "jsx",
+    "parser",
+    "jsx2json",
+    "converter",
+    "react",
+    "broswer"
+  ],
+  "author": "Hussein Kizz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hussseinkizz/z-parser/issues"
+  },
+  "homepage": "https://github.com/Hussseinkizz/z-parser#readme"
+}
