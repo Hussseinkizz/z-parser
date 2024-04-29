@@ -52,16 +52,16 @@ export const createElement = (options) => {
       } else {
         handleChild(children);
       }
-    } else if (attribute === 'classNames') {
-      // don't work on undeifned and null classNames
-      if (!options.classNames || options.classNames === null) return;
+    } else if (attribute === 'classNames' && options.classNames) {
       // Handle multiple classes
       options.classNames
         .split(' ')
         .forEach((className) => element.classList.add(className));
     } else if (attribute.startsWith('on')) {
       const eventName = attribute.slice(2).toLowerCase();
-      element.addEventListener(eventName, options[attribute]);
+      console.log('options::', typeof options[attribute]);
+      // element.addEventListener(eventName, options[attribute]);
+      element.setAttribute(`on${eventName}`, options[attribute]);
     } else {
       attribute !== 'element' &&
         element.setAttribute(attribute, options[attribute]);
