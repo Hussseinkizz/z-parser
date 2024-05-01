@@ -59,11 +59,11 @@ export const createElement = (options) => {
         .forEach((className) => element.classList.add(className));
     } else if (attribute.startsWith('on')) {
       const eventName = attribute.slice(2).toLowerCase();
-      console.log('options::', typeof options[attribute]);
-      // element.addEventListener(eventName, options[attribute]);
-      element.setAttribute(`on${eventName}`, options[attribute]);
+      element.addEventListener(eventName, options[attribute]);
+      // console.log('options::', typeof options[attribute]);
     } else {
       attribute !== 'element' &&
+        attribute !== 'classNames' &&
         element.setAttribute(attribute, options[attribute]);
     }
   }

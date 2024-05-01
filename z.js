@@ -2,7 +2,7 @@ import { jsx as _jsx } from './parser/index.js';
 import { createElement } from './render/z-render.js';
 
 export function jsx(jsxInput) {
-  let ast = _jsx(jsxInput);
+  let ast = _jsx(jsxInput, { useEval: true });
   let node = ast.children[0];
   console.log('node::', node);
 
@@ -10,7 +10,7 @@ export function jsx(jsxInput) {
     let newElement = createElement({
       element: node.type,
       children: node.children[0], // evaluate if children needs to be parsed recursively
-      classNames: node.props?.className ?? '_',
+      classNames: node.props?.className ?? null,
       ...node.props,
     });
     console.log('newElement::', newElement);
