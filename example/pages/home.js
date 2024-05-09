@@ -7,10 +7,19 @@ export default function Home() {
   };
 
   return jsx(`
+  <>
     <div>
-    <button onClick={${handleClick}}>${name}</button>
+    <button onClick={${handleClick}}>
+    ${name}
+    </button>
       <p>hello ${name}</p>
       <h1>Hello World</h1>
+      <p style="color: red;">crazy fox jumps over a lazy dog!</p>
     </div>
+    <section>
+    <p>testing fragment</p>
+    <span>ohh yes!</span>
+    </section>
+    </>
   `);
 }
