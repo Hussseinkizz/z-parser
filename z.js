@@ -1,11 +1,17 @@
-import { jsx as _jsx } from './parser/index.js';
+import { jsx } from './parser/index.js';
 import { createElement } from './render/z-render.js';
+import { StateRadio } from './node_modules/state-radio/dist/state-radio.js';
 
-export function jsx(jsxInput) {
-  let ast = _jsx(jsxInput, { useEval: true });
+/**
+ * Parses JSX input and returns the html element or DOM representation.
+ * @param {string} jsxInput - A string containing JSX syntax enclosed in backticks.
+ * @returns {HTMLElement | null} The first HTMLElement from the parsed JSX, or null if the parsing fails.
+ */
+export function html(jsxInput) {
+  let ast = jsx(jsxInput, { useEval: true });
   let collection = [];
   handleNode(collection, ast);
-  console.log('dom:::', collection);
+  // console.log('dom:::', collection);
 
   return collection[0];
 }
@@ -49,6 +55,38 @@ function handleNodeChildren(childCollection, children, depthIndex) {
   }
 }
 
+/**
+ * Renders a component function to a parent element.
+ *
+ * @param {HTMLElement} parentElement - The parent element to render the component to.
+ * @param {Function} componentFunction - The component function to render.
+ */
 export function render(parentElement, componentFunction) {
+  parentElement.innerHTML = '';
   parentElement.appendChild(componentFunction());
+}
+
+// state management
+const { channels } = new StateRadio();
+
+export const store = channels;
+
+export function useEffect(newFn, dependentStateChannels) {
+  dependentStateChannels.forEach((channel) => {
+    let targetChannel = store.getChannel(channel);
+    if (!targetChannel) {
+      console.error('channel not found', channel);
+      return;
+    }
+    targetChannel.subscribe(newFn);
+  });
+}
+
+export function useState(name, initialState) {
+  let channel = channels.addChannel(name, initialState);
+
+  const state = channel.getState();
+  const setState = channel.setState;
+
+  return [state, setState, channel];
 }
