@@ -119,4 +119,11 @@ Acorn: <https://github.com/acornjs/acorn-jsx>
 
 Acorn: <https://github.com/acornjs/acorn>
 
+Acorn Jsx: <https://www.npmjs.com/package/acorn-jsx-walk>
+
+Acorn Walk: <https://github.com/acornjs/acorn/blob/master/acorn-walk/README.md>
+
+JSX Vanilla: <https://github.com/AdeonMaster/jsx-vanilla>
+
 <https://stackoverflow.com/questions/65342217/acorn-jsx-walk-nodes-with-particular-type>
+<https://snyk.io/advisor/npm-package/acorn-walk/functions/acorn-walk.bas>

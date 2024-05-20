@@ -12,7 +12,7 @@ export default function Home() {
 
   const handleUserName = (e) => {
     // setUserName(e.target.value);
-    console.log('setter', setUserName);
+    console.log('setter', userName, setUserName);
     console.log('New username:', e.target.value);
   };
 

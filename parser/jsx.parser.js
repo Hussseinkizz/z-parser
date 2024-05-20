@@ -24,6 +24,8 @@ export const Parser = (tokens, opts = {}) => {
       } else if (key && token.type == 'code') {
         if (opts.useEval) {
           props[key] = eval(`(()=>{ return ${token.value}})()`);
+          // console.log(`${token.value}`);
+          //  props[key] = () => eval(`${token.value}`);
         } else {
           props[key] = token.value;
         }
