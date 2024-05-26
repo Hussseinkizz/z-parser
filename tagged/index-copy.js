@@ -8,4 +8,8 @@ export const Home = () => {
   return html` <button onClick="{${handleClick}}">hello ${name}</button> `;
 };
 
-function html() {}
+function html(strings, ...values) {
+  console.log('Logg::', values);
+}
+
+Home();
