@@ -1,38 +1,31 @@
 export function html(strings, ...values) {
   // Construct the full string from the template literal parts
-  const fullString = strings.reduce((acc, str, i) => {
-    if (typeof values[i] === 'function') {
-      return acc + str + `__FUNCTION_${i}__`;
-    }
-    return acc + str + (values[i] !== undefined ? values[i] : '');
-  }, '');
+  const fullString = strings.reduce(
+    (acc, str, i) => acc + str + (values[i] !== undefined ? values[i] : ''),
+    ''
+  );
 
-  // Store functions separately for future use
+  // Store functions separately
   const functions = [];
-  values.forEach((value, index) => {
+  values.forEach((value) => {
     if (typeof value === 'function') {
       functions.push({
-        name: `__FUNCTION_${index}__`,
+        name: value.name,
         fn: value,
       });
     }
   });
-
-  // console.log(values);
-  // console.log(fullString);
-  // console.log(functions);
+  console.log(functions);
 
   // Parse the HTML string using DOMParser
   const parser = new DOMParser();
   const doc = parser.parseFromString(fullString, 'text/html');
-  // note: we could load all children in body to support multiple elements passed to html tag function but that is easy to mess up so we go with a single child and ignore the rest
-  // console.log(doc.body);
 
   const rootElement = doc.body.firstChild;
-  return createElement(buildStructure(rootElement, functions));
+  return buildStructure(rootElement, functions);
 }
 
-// Recursive function to build some kind of AST structure
+// Recursive function to build the structure
 function buildStructure(element, functions) {
   const tag = element.tagName.toLowerCase();
   const attributes = extractAttributes(element, functions);
@@ -43,7 +36,7 @@ function buildStructure(element, functions) {
 
   const children = Array.from(element.childNodes)
     .filter((node) => node.nodeType === Node.ELEMENT_NODE)
-    .map((node) => buildStructure(node, functions));
+    .map((node) => buildStructure(node));
 
   return {
     type: tag,
@@ -52,7 +45,7 @@ function buildStructure(element, functions) {
     children: children,
   };
 }
-// Function to create an element from the structure
+
 export function createElement(structure) {
   const { type, content, attributes, children } = structure;
 
@@ -66,13 +59,26 @@ export function createElement(structure) {
 
   // Apply the attributes
   for (const [key, value] of Object.entries(attributes)) {
+    // console.log('types of', key, typeof value);
     if (key.startsWith('on')) {
       const eventType = key.slice(2).toLowerCase();
+      console.log('value::', value);
       element.addEventListener(eventType, value);
     } else {
       element.setAttribute(key, value);
     }
   }
+  // for (const [key, value] of Object.entries(attributes)) {
+  //   console.log('types of', key, typeof value);
+  //   if (key.startsWith('on') && typeof value === 'function') {
+  //     const eventType = key.slice(2).toLowerCase();
+  //     console.log('value::', value);
+  //     element.addEventListener(eventType, value);
+  //   } else {
+  //     element.setAttribute(key, value);
+  //   }
+  // }
+
   // Recursively create and append child elements
   if (children) {
     children.forEach((child) => {
@@ -89,9 +95,9 @@ function extractAttributes(element, functions) {
   const attributes = {};
   Array.from(element.attributes).forEach((attr) => {
     const attrValue = attr.value.trim();
-    const functionPlaceholder = functions.find((f) => f.name === attrValue);
-    if (functionPlaceholder) {
-      attributes[attr.name] = functionPlaceholder.fn;
+    if (attrValue.startsWith('${') && attrValue.endsWith('}')) {
+      const functionIndex = parseInt(attrValue.slice(2, -1), 10);
+      attributes[attr.name] = functions[functionIndex];
     } else {
       attributes[attr.name] = attr.value;
     }

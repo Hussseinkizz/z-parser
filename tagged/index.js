@@ -1,26 +1,29 @@
-import { createElement, html } from './tag-parser.js';
+import { html } from './tag-parser.js';
 
 export const Home = () => {
   let count = 1;
+  const name = 'Z js Framework!';
+
   const handleClick = () => {
     console.log('Button clicked!', count + 1);
   };
 
-  const name = 'Kizz';
+  function handleInput(event) {
+    console.log('Input value changed!', event.target.value);
+  }
 
-  return html`<button class="btn btn-primary" onClick="${handleClick}">
-    hello ${name}
-    <div>
-      Hello nested!
-      <span style="color: red;">foo bar</span>
-    </div>
-  </button>`;
+  return html`<div>
+    <h1>${name}</h1>
+    <button class="btn btn-primary" onClick="${handleClick}">
+      click
+      <span style="color: red;">me</span>
+    </button>
+    <input
+      type="text"
+      style="margin-left: 0.5rem;"
+      placeholder="awesome kizz"
+      onInput="${handleInput}" />
+  </div>`;
 };
 
-const Button = () => `<button>click me</button>`;
-
-const elementStructure = Home();
-console.log('structure::', elementStructure);
-
-const element = createElement(elementStructure);
-document.body.appendChild(element);
+document.body.appendChild(Home());
