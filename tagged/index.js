@@ -1,29 +1,55 @@
-import { html } from './tag-parser.js';
+import { css, html } from './tag-parser.js';
 
 export const Home = () => {
-  let count = 1;
+  let count = 0;
   const name = 'Z js Framework!';
-
-  const handleClick = () => {
-    console.log('Button clicked!', count + 1);
-  };
 
   function handleInput(event) {
     console.log('Input value changed!', event.target.value);
   }
 
+  const styledInput = css`
+    width: 50%;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: tomato;
+  `;
+
   return html`<div>
     <h1>${name}</h1>
-    <button class="btn btn-primary" onClick="${handleClick}">
-      click
-      <span style="color: red;">me</span>
-    </button>
     <input
       type="text"
-      style="margin-left: 0.5rem;"
+      class="${styledInput}"
       placeholder="awesome kizz"
       onInput="${handleInput}" />
+    <!-- Button Component Usage -->
+    <div class="flex-item">${Button('Styled Button Component', count)}</div>
   </div>`;
+};
+
+const Button = (children, count) => {
+  const buttonClass = css`
+    background-color: tomato;
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: crimson;
+    }
+  `;
+
+  const clickButton = () => {
+    console.log('button clicked:', count + 1);
+  };
+
+  return html`<button class="${buttonClass}" onClick="${clickButton}">
+    ${children}
+  </button>`;
 };
 
 document.body.appendChild(Home());

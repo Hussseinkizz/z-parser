@@ -98,3 +98,48 @@ function extractAttributes(element, functions) {
   });
   return attributes;
 }
+
+// ### CSS Simple Parser ###
+// DJB2 hash function for better distribution and fewer collisions
+function hashString(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) + hash + str.charCodeAt(i);
+  }
+  return hash.toString(36);
+}
+
+const styleCache = new Map();
+let styleSheet;
+
+export function css(strings, ...values) {
+  if (!styleSheet) {
+    styleSheet = document.createElement('style');
+    document.head.appendChild(styleSheet);
+  }
+
+  // Combine the strings and values into a single string of CSS
+  const styleString = strings.reduce(
+    (acc, str, i) => acc + str + (values[i] || ''),
+    ''
+  );
+
+  // Generate a hash of the style string to ensure consistent class names
+  const className = 'css-' + hashString(styleString);
+
+  // Check if the style string is already in the cache
+  if (styleCache.has(className)) {
+    return styleCache.get(className);
+  }
+
+  // Create the CSS rule and append it to the style sheet
+  const rule = `.${className} { ${styleString} }`;
+  styleSheet.innerHTML += rule;
+
+  // Cache the class name with the style string
+  styleCache.set(className, className);
+
+  // console.log('style cache::', styleCache);
+
+  return className;
+}
