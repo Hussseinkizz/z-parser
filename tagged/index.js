@@ -33,6 +33,8 @@ const Button = (children, count) => {
   const buttonClass = css`
     background-color: tomato;
     color: #fff;
+    display: flex;
+    gap: 1rem;
     border-radius: 4px;
     padding: 0.5rem 1rem;
     transition: background-color 0.2s;
